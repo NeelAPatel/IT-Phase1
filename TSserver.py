@@ -17,8 +17,9 @@ tssd.bind(server_binding)
 
 ctsd, addr = tssd.accept()
 
-# hnstring = hostname_str
+# hnstring = hostnameStr
 hostnameStr = ctsd.recv()
+
 if (hostnameStr in TS_table):
 	entry = TS_table(hostnameStr)
 else:
