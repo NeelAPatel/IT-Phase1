@@ -18,14 +18,6 @@ print("Num Of Lines: " + str(numLinesInFile))
 
 
 #Create Table
-numCols = 3
-numRows = numLinesInFile
-TS_table = ["BLEH"] * numRows
-for i in range(numCols):
-	TS_table[i] = ["BLAH"] * numCols
-
-print(TS_table)
-
 TSarr = [[] for _ in range(numLinesInFile)]
 print(TSarr)
 

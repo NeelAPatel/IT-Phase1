@@ -1,24 +1,25 @@
 import socket as mysoc
 
 try:
-	tssd = mysoc.socket(mysoc.AF_INET,mysoc.SOCK_STREAM)
+    ss = mysoc.socket(mysoc.AF_INET, mysoc.SOCK_STREAM)
+    print("[S]: Server socket created")
 except mysoc.error as err:
-	print('[TS]: {}	\n '.format("socket open error ",err))
+    print('{} \n'.format("socket open error ", err))
+server_binding = ('', 60000)
+ss.bind(server_binding)
+ss.listen(1)
+host = mysoc.gethostname()
+print("[S]: Server host name is: ", host)
+localhost_ip = (mysoc.gethostbyname(host))
+print("[S]: Server IP address is  ", localhost_ip)
+csockid, addr = ss.accept()
+print("[S]: Got a connection request from a client at TSSERVER", addr)
 
 
-## GENERAL SETUP
-# Select Port number | Host Name | LocalHost IP
-server_binding = ('', 50007)
-myHost = mysoc.gethostname()
-localhost_ip = (mysoc.gethostbyname(myHost))
-
-# bind to socket
-tssd.bind(server_binding)
-
-ctsd, addr = tssd.accept()
-
-# hnstring = hostnameStr
-hostnameStr = ctsd.recv()
+# Close the server socket
+ss.close()
+exit()
+'''
 
 if (hostnameStr in TS_table):
 	entry = TS_table(hostnameStr)
@@ -26,3 +27,4 @@ else:
 	entry = "hname" + "Error: Host not found"
 
 ctsd.send(entry)
+'''

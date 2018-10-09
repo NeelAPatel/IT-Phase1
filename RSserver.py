@@ -34,27 +34,37 @@ print("Num Of Lines: " + str(numLinesInFile))
 
 #Create Table
 RSarr = [[] for _ in range(numLinesInFile)]
-print(RSarr)
 
-# Take file contents, add to table
+#fill in table
 rowIndex= 0
 while True:
  inLine = inFile.readline()
-#if Line does not exist (EOF)
- if not inLine:
+ if not inLine: #if Line does not exist (EOF)
     break
- print("Current Line: " + str(rowIndex) + " >>" + inLine + "<<")
-# 1. Separate by spaces (there are different # of spaces
-
+#print("Current Line: " + str(rowIndex) + " >>" + inLine + "<<")
+#Separate by spaces (there are different # of spaces
  splitList = inLine.split()
- #print(*splitList, sep= "][")
  RSarr[rowIndex].append(splitList[0])
  RSarr[rowIndex].append(splitList[1])
  RSarr[rowIndex].append(splitList[2])
- print(RSarr)
+ #print(RSarr)
  rowIndex+=1
- print("============")
+ #print("============")
 
+
+testHostName = "www.rutgers.com"
+foundHost =0
+retHostDetail=""
+for i in range(numLinesInFile):
+	if (RSarr[i][0]== testHostName):
+		print("FOUND HOST NAME")
+		foundHost=1
+		for j in range(3):
+			retHostDetail= retHostDetail + RSarr[i][j]+ " "
+		print(retHostDetail)
+	
+if(foundHost == 0):
+	print("NEVER FOUND IT")
 
 
 
