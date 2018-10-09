@@ -10,8 +10,8 @@ except mysoc.error as err:
 
 #second Socket
 try:
-	ts = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-except socket.error as err:
+	ts = mysoc.socket(mysoc.AF_INET, mysoc.SOCK_STREAM)
+except mysoc.error as err:
 	print('{} \n'.format("socket open error ", err))
 
 
@@ -34,13 +34,10 @@ for i in splitList:
 		print(data_from_server_decoded)
 	else:
 		print("Will bind not finding to hostname:["+splitList[0])
+		ts_ip = mysoc.gethostbyname(splitList[0])
+		server_bindingTS = (ts_ip, TsPort)
+		ts.connect(server_bindingTS)
 		
-		try:
-			ts_ip = socket.gethostbyname(splitList[0])
-		except socket.gaierror:
-			print("could not resolve the host")
-		
-		ts.connect((ts_ip, TsPort))
 		
 
 
