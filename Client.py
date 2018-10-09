@@ -14,17 +14,26 @@ try:
 except mysoc.error as err:
 	print('{} \n'.format("socket open error", err))
 
+
+RsPort = 50000
+TSPort = 60000
+sa_sameas_myaddr = mysoc.gethostbyname(mysoc.gethostname())
+
+# connect to RS_SERVER
+server_binding = (sa_sameas_myaddr, RsPort)
+ctors.connect(server_binding)
 ## GENERAL SETUP
 # Select Port number | Host Name | LocalHost IP
-server_binding = ('', 50007)
-myHost = mysoc.gethostname()
-localhost_ip = (mysoc.gethostbyname(myHost))
+
+#localhost_ip = (mysoc.gethostbyname(myHost))
 
 
 # DETERMINE HOSTNAME OF RS SERVER/PORT
 # BIND CTORS TO RS ADDRESS/ RSPORT]
 
 #FIRST Connect to RS Server
+'''
+
 ctors.send("hostname", RSserver)
 dr = ctors = recv()
 
@@ -40,3 +49,4 @@ else:
 		#Connect and send hostname string
 		dr = ctots.recv()
 		output(dr)
+		'''
