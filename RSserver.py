@@ -26,7 +26,7 @@ print("[S]: Got a connection request from a client at RSSERVER", addr)
 
 
 # IMPORT FROM TS FILE HERE
-inPath = 'PROJI-DNSTS.txt'
+inPath = 'PROJI-DNSRS.txt'
 numLinesInFile = fileLineCount(inPath)
 inFile = open(inPath, 'r')
 print("Num Of Lines: " + str(numLinesInFile))
@@ -51,20 +51,29 @@ while True:
  rowIndex+=1
  #print("============")
 
-
-testHostName = "www.rutgers.com"
+#"www.rutgers.com"
+testHostName = "bb"
 foundHost =0
 retHostDetail=""
+retHostDetailNS=""
 for i in range(numLinesInFile):
 	if (RSarr[i][0]== testHostName):
 		print("FOUND HOST NAME")
 		foundHost=1
 		for j in range(3):
 			retHostDetail= retHostDetail + RSarr[i][j]+ " "
-		print(retHostDetail)
-	
+		print("Going to sent to clinet" + retHostDetail)
+	else:
+		if(RSarr[i][2]== "NS"):
+			for j in range(3):
+				retHostDetailNS = retHostDetailNS + RSarr[i][j] + " "
+			print("Going to sent to clinet" + retHostDetailNS)
+
+#send the result back
 if(foundHost == 0):
-	print("NEVER FOUND IT")
+	csockid.send(retHostDetailNS.encode('utf-8'))
+else:
+	csockid.send(retHostDetail.encode('utf-8'))
 
 
 

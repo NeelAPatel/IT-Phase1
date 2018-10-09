@@ -1,10 +1,13 @@
 import socket as mysoc
+import socket
 
+#second Socket
 try:
-    ss = mysoc.socket(mysoc.AF_INET, mysoc.SOCK_STREAM)
-    print("[S]: Server socket created")
-except mysoc.error as err:
-    print('{} \n'.format("socket open error ", err))
+	ss = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+except socket.error as err:
+	print('{} \n'.format("socket open error ", err))
+
+ 
 server_binding = ('', 60000)
 ss.bind(server_binding)
 ss.listen(1)
@@ -13,7 +16,7 @@ print("[S]: Server host name is: ", host)
 localhost_ip = (mysoc.gethostbyname(host))
 print("[S]: Server IP address is  ", localhost_ip)
 csockid, addr = ss.accept()
-print("[S]: Got a connection request from a client at TSSERVER", addr)
+print("[S]: Got a connection request from a client at ***TSSERVER", addr)
 
 
 # Close the server socket

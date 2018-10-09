@@ -1,37 +1,50 @@
 import socket as mysoc
+import socket
 
 
 # FIRST Socket
 try:
-	ctors = mysoc.socket(mysoc.AF_INET, mysoc.SOCK_STREAM)
+	rs = mysoc.socket(mysoc.AF_INET, mysoc.SOCK_STREAM)
 except mysoc.error as err:
 	print('{} \n'.format("socket open error ", err))
 
-
-# SECOND SOCKET
+#second Socket
 try:
-	ctots = mysoc.socket(mysoc.AF_INET, mysoc.SOCK_STREAM)
-except mysoc.error as err:
-	print('{} \n'.format("socket open error", err))
+	ts = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+except socket.error as err:
+	print('{} \n'.format("socket open error ", err))
 
 
 RsPort = 50000
-TSPort = 60000
+TsPort = 60000
 sa_sameas_myaddr = mysoc.gethostbyname(mysoc.gethostname())
 
-# connect to RS_SERVER
-server_binding = (sa_sameas_myaddr, RsPort)
-ctors.connect(server_binding)
-## GENERAL SETUP
-# Select Port number | Host Name | LocalHost IP
+# connect to RS_SERVER first
+server_bindingRS = (sa_sameas_myaddr, RsPort)
+rs.connect(server_bindingRS)
 
-#localhost_ip = (mysoc.gethostbyname(myHost))
+data_from_server = rs.recv(1024)
+print("[C]: Data received from server: [", data_from_server.decode('utf-8'), "]")
+data_from_server_decoded= data_from_server.decode('utf-8')
+
+splitList = data_from_server_decoded.split()
+
+for i in splitList:
+	if(i=='A'): #can hard code 2 bc it will always be in the 3rd position
+		print(data_from_server_decoded)
+	else:
+		print("Will bind not finding to hostname:["+splitList[0])
+		
+		try:
+			ts_ip = socket.gethostbyname(splitList[0])
+		except socket.gaierror:
+			print("could not resolve the host")
+		
+		ts.connect((ts_ip, TsPort))
+		
 
 
-# DETERMINE HOSTNAME OF RS SERVER/PORT
-# BIND CTORS TO RS ADDRESS/ RSPORT]
 
-#FIRST Connect to RS Server
 '''
 
 ctors.send("hostname", RSserver)
