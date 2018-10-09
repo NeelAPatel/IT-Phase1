@@ -31,18 +31,12 @@ dr = ctors = recv()
 if flag field(dr) == 'A':
 	output(dr)
 else:
-	if flag - field(dr) == 'NS'
+	if flag - field(dr) == 'NS':
 		#Connect to TS server
 		TSname = hostname - field(fr)
 		# Determine IP address  of TSname/ bind ctots to TS addreess
-
-
-
-
-	[determine hostname of RS server and port ] [bind ctors socket to RS address, rsport] #First Connect to RS server ctors.send(“hostname”,RSserver ) dr=ctors.recv(…..) if flag field(dr) == ‘A’ output(dr) else
-if flag-field (dr) == ‘NS’
-[connect to TS server] TSname= hostname-field(dr)
-[Determine IP address of TSname bind ctots socket to TS address,
-tsport] ctots.send(hostname)
-[Connect and send hostname string ] dr=ctots.recv(…..)
-output (dr
+		ctots.send(TSHostName..? )
+		
+		#Connect and send hostname string
+		dr = ctots.recv()
+		output(dr)
