@@ -56,7 +56,20 @@ while True:
 	rs.send(inLine.encode('utf-8'))
 	print("Line Sent: " + inLine)
 	
-
+	
+	data_from_server = rs.recv(1024)
+	msg = data_from_server.decode('utf-8')
+	print("[C]: From RS Response : " + msg)
+	
+	#split it in 3 and check 3rd portion.
+	
+	splitList = msg.split()
+	if splitList[2] == 'NS':
+		print("MUST CONNECT TO TS NOW.")
+	else:
+		print("VALID")
+	
+	print("")
 
 
 

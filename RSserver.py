@@ -63,7 +63,7 @@ print("[RS] Received Num of lookups: " + msg)
 csockid.send("NumLookups received".encode('utf-8'))
 
 while 1:
-	
+	print("=========== LOOKUP ==============")
 	data_from_client = csockid.recv(100)
 	if not data_from_client:
 		break
@@ -75,9 +75,24 @@ while 1:
 	
 	# Look up DNS in RS_Table
 	x = len(RSarr)
+	dnsMatch = False
 	for i in range(x):
 		if (RSarr[i][0] == msg):
-			print("MATCH FOUND: " + str(i) + " " + RSarr[i][0] + " ||| " + msg)
+			print("MATCH FOUND >> " + RSarr[i][0] + " ||| " + msg)
+			dnsMatch = True
+			# send entire row
+			str = RSarr[i][0] + " " + RSarr[i][1] + " " + RSarr[i][2]
+			csockid.send(str.encode('utf-8'))
+			
+	
+	if dnsMatch == False:
+		# send TS server information
+		print("Match not found. sending TS info")
+		str = RSarr[len(RSarr)-1][0] + " " + RSarr[len(RSarr)-1][1] + " " + RSarr[len(RSarr)-1][2]
+		csockid.send(str.encode('utf-8'))
+	
+	print("")
+		
 
 
 
