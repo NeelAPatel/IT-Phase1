@@ -55,7 +55,6 @@ while True:
 testHostName = "bb"
 foundHost =0
 retHostDetail=""
-retHostDetailNS=""
 for i in range(numLinesInFile):
 	if (RSarr[i][0]== testHostName):
 		print("FOUND HOST NAME")
@@ -63,14 +62,11 @@ for i in range(numLinesInFile):
 		for j in range(3):
 			retHostDetail= retHostDetail + RSarr[i][j]+ " "
 		print("Going to sent to clinet" + retHostDetail)
-	else:
-		if(RSarr[i][2]== "NS"):
-			for j in range(3):
-				retHostDetailNS = retHostDetailNS + RSarr[i][j] + " "
-			print("Going to sent to clinet" + retHostDetailNS)
 
 #send the result back
 if(foundHost == 0):
+	retHostDetailNS= "ilab2.cs.rutgers.edu"
+	print("Going to sent to clinet" + retHostDetailNS)
 	csockid.send(retHostDetailNS.encode('utf-8'))
 else:
 	csockid.send(retHostDetail.encode('utf-8'))
