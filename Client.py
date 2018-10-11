@@ -1,5 +1,13 @@
 import socket as mysoc
-import socket
+
+
+def fileLineCount(path):
+	with open(path) as fileIn:
+		for index, element in enumerate(fileIn):
+			pass
+	
+	val = index + 1
+	return val
 
 
 # FIRST Socket
@@ -10,16 +18,56 @@ except mysoc.error as err:
 
 
 
-RsPort = 50000
-my_hostname = mysoc.gethostbyname(mysoc.gethostname())
+RsPort = 50020
+clientHost = mysoc.gethostname()
+print("[C]: Client name is: " , clientHost)
+
+clientIP = mysoc.gethostbyname(mysoc.gethostname())
+print("[C]: Client IP is: " , clientIP)
 
 # connect to RS_SERVER first
-server_bindingRS = (my_hostname, RsPort)
+server_bindingRS = (clientIP, RsPort)
 rs.connect(server_bindingRS)
+print ("[C]:  Connected to RS Server")
+
+
+
+# Import from file
+inPath = 'PROJI-HNS.txt'
+numLinesInFile = fileLineCount(inPath)
+inFile = open(inPath, 'r')
+print("Num Of Lines in HNS: " + str(numLinesInFile))
+
+rs.send(str(numLinesInFile).encode('utf-8'))
+data_from_server = rs.recv(100)
+msg = data_from_server.decode('utf-8')
+print("[C]: From RS: " + msg)
+# send num of lookups
+
+
+while True:
+	# Each iteration = one lookup in TS/RS
+	inLine = inFile.readline()
+	if not inLine:
+		break;
+	
+	# Send line to RS
+	inLine = inLine.strip('\n')
+	rs.send(inLine.encode('utf-8'))
+	print("Line Sent: " + inLine)
+	
+
+
+
+
+
 
 data_from_server = rs.recv(1024)
-print("[C]: Data received from server: [", data_from_server.decode('utf-8'), "]")
+print("[C]: Data received from RS server: [", data_from_server.decode('utf-8'), "]")
 data_from_server_decoded= data_from_server.decode('utf-8')
+
+
+
 
 splitList = data_from_server_decoded.split()
 
@@ -27,7 +75,7 @@ for i in splitList:
 	if(i=='A'): #can hard code 2 bc it will always be in the 3rd position
 		print(data_from_server_decoded)
 	else:
-		print("Will bind not need to find host name["+splitList[0])
+		print("[C]: Will not bind, need to find host name["+splitList[0] + "]")
 		# second Socket
 		try:
 			ts = mysoc.socket(mysoc.AF_INET, mysoc.SOCK_STREAM)
@@ -47,7 +95,7 @@ for i in splitList:
 		ts.connect(server_bindingTS)
 		ts.send(tsHostName.encode('utf-8')) #send the hostname to ts
 		data_from_ts = ts.recv(1024)
-		print("recieved: ", data_from_ts.decode('utf-8'))
+		print("[C] recieved: ", data_from_ts.decode('utf-8'))
 
 
 
