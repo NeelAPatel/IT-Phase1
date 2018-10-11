@@ -62,7 +62,7 @@ for i in range(numLinesInFile):
 		foundHost = 1
 		for j in range(3):
 			retHostDetail = retHostDetail + RSarr[i][j] + " "
-		print("Going to sent to clinet" + retHostDetail)
+		print("Going to sent to client" + retHostDetail)
 
 # send the result back
 if (foundHost == 0):

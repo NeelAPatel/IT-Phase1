@@ -13,6 +13,7 @@ def fileLineCount(path):
 # FIRST Socket
 try:
 	rs = mysoc.socket(mysoc.AF_INET, mysoc.SOCK_STREAM)
+	print("[C]: Socket for RS created")
 except mysoc.error as err:
 	print('{} \n'.format("socket open error ", err))
 
@@ -49,7 +50,7 @@ while True:
 	# Each iteration = one lookup in TS/RS
 	inLine = inFile.readline()
 	if not inLine:
-		break;
+		break
 	
 	# Send line to RS
 	inLine = inLine.strip('\n')
@@ -66,6 +67,12 @@ while True:
 	splitList = msg.split()
 	if splitList[2] == 'NS':
 		print("MUST CONNECT TO TS NOW.")
+		try:
+			ts = mysoc.socket(mysoc.AF_INET, mysoc.SOCK_STREAM)
+			print("socket created")
+		except mysoc.error as err:
+			print('{} \n'.format("socket open error ", err))
+		
 	else:
 		print("VALID")
 	
@@ -74,7 +81,7 @@ while True:
 
 
 
-
+print("Stuff ended")
 data_from_server = rs.recv(1024)
 print("[C]: Data received from RS server: [", data_from_server.decode('utf-8'), "]")
 data_from_server_decoded= data_from_server.decode('utf-8')
