@@ -54,33 +54,65 @@ while True:
 
 while 1:
 	data_from_server = csockid.recv(100)
-	if not data_from_server:
-		print("%%%%%%HAVING TO BREAK NOW ")
-		break
-	findHost = data_from_server.decode('utf-8')
-	print("[TS] Data received from client: [", findHost + "]")
+	# if not data_from_server:
+	# 	print("%%%%%%HAVING TO BREAK NOW ")
+	# 	break
+	# findHost = data_from_server.decode('utf-8')
+	# print("[TS] Data received from client: [", findHost + "]")
+	#
+	# foundHost = 0
+	# str=""
+	#
+	#
+	# for i in range(numLinesInFile):
+	# 	if (RSarr[i][0] == findHost):
+	# 		print("FOUND HOST NAME")
+	# 		foundHost = 1
+	# 		str = RSarr[i][0] + " " + RSarr[i][1] + " " + RSarr[i][2]
+	# 		print("Going to send to client" + str)
+	# 		break
+	#
+	# # send the result back
+	# if foundHost == 0:
+	# 	errorMessage = findHost + "- Error:HOST NOT FOUND"
+	# 	csockid.send(errorMessage.encode('utf-8'))
+	# else:
+	# 	print("Sending host name details nowts")
+	# 	csockid.send(str.encode('utf-8'))
 	
-	foundHost = 0
-	str=""
-	
-	
-	for i in range(numLinesInFile):
-		if (RSarr[i][0] == findHost):
-			print("FOUND HOST NAME")
-			foundHost = 1
-			str = RSarr[i][0] + " " + RSarr[i][1] + " " + RSarr[i][2]
-			print("Going to sent to client" + str)
+	if data_from_server:
+		print("[TS]: Data recieved")
+		findHost = data_from_server.decode('utf-8')
+		print("[TS < C] Data decoded from client: [", findHost + "]")
+		
+		if (findHost == "Kill TS"):
 			break
-	
-	# send the result back
-	if foundHost == 0:
-		errorMessage = findHost + "- Error:HOST NOT FOUND"
-		csockid.send(errorMessage.encode('utf-8'))
-	else:
-		csockid.send(str.encode('utf-8'))
+		
+		
+		
+		foundHost = 0
+		str=""
+		
+		
+		for i in range(numLinesInFile):
+			if (RSarr[i][0] == findHost):
+				print("FOUND HOST NAME")
+				foundHost = 1
+				str = RSarr[i][0] + " " + RSarr[i][1] + " " + RSarr[i][2]
+				print("Going to send to client" + str)
+				break
+		
+		# send the result back
+		if foundHost == 0:
+			errorMessage = findHost + "- Error:HOST NOT FOUND"
+			csockid.send(errorMessage.encode('utf-8'))
+		else:
+			print("Sending host name details now ts")
+			csockid.send(str.encode('utf-8'))
 
 # Close the server socket
+
+print("[TS] Client told me to kill myself... goodbye.")
 ts.close()
-print("***CLOSED TS SERVER")
 exit()
 

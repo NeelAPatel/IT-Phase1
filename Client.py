@@ -17,6 +17,13 @@ try:
 except mysoc.error as err:
 	print('{} \n'.format("socket open error ", err))
 	
+# SECOND SOCKET
+try:
+	ts = mysoc.socket(mysoc.AF_INET, mysoc.SOCK_STREAM)
+	print("[C]: Socket for TS created")
+except mysoc.error as err:
+	print('{} \n'.format("TS socket open error ", err))
+
 RsPort = 50020
 clientHost = mysoc.gethostname()
 print("[C]: Client name is: " , clientHost)
@@ -31,6 +38,15 @@ print ("[C]:  Connected to RS Server")
 
 
 
+TsPort = 60000
+tsHostName = mysoc.gethostname()
+ts_ip = mysoc.gethostbyname(tsHostName)
+server_bindingTS = (ts_ip, TsPort)
+ts.connect(server_bindingTS)
+print("[C]: Connected to TS Server")
+
+
+
 # Import from file
 inPath = 'PROJI-HNS.txt'
 numLinesInFile = fileLineCount(inPath)
@@ -40,7 +56,7 @@ print("Num Of Lines in HNS: " + str(numLinesInFile))
 rs.send(str(numLinesInFile).encode('utf-8'))
 data_from_server = rs.recv(100)
 msg = data_from_server.decode('utf-8')
-print("[C]: From RS: " + msg)
+print("[C < RS]: Response: " + msg)
 # send num of lookups
 
 
@@ -53,46 +69,39 @@ while True:
 	# Send line to RS
 	inLine = inLine.strip('\n')
 	rs.send(inLine.encode('utf-8'))
-	print("Line Sent: " + inLine)
+	print("[C > RS] Line Sent: " + inLine)
 	
 	
 	data_from_server = rs.recv(1024)
 	msg = data_from_server.decode('utf-8')
-	print("[C]: From RS Response : " + msg)
+	print("[C < RS]: Response : " + msg)
 	
 	#split it in 3 and check 3rd portion.
 	
 	splitList = msg.split()
 	if splitList[2] == 'NS':
-		print("MUST CONNECT TO TS NOW.")
+		print("[C]: MUST CONNECT TO TS NOW.")
 		
-		# SECOND SOCKET
-		try:
-			ts = mysoc.socket(mysoc.AF_INET, mysoc.SOCK_STREAM)
-			print("socket created")
-		except mysoc.error as err:
-			print('{} \n'.format("socket open error ", err))
-		
-		TsPort = 60000
-		tsHostName = splitList[0]
-		ts_ip = mysoc.gethostbyname(tsHostName)
-		server_bindingTS = (ts_ip, TsPort)
-		ts.connect(server_bindingTS)
 		
 		# send the hostname to ts
+		print("[C > TS] sending: "  + inLine)
 		ts.send(inLine.encode('utf-8'))
 		data_from_ts = ts.recv(1024)
-		print("[C] recieved: ", data_from_ts.decode('utf-8'))
-		ts.close()
+		print("[C < TS] received:  ", data_from_ts.decode('utf-8'))
 		
 		#FIXME still add the code about ns from ts
 		
 	else:
-		print("VALID: ", msg)
+		print("[C]: Line is VALID: ", msg)
 	
 	print("")
 
+
+
+ts.send("Kill TS".encode('utf-8'))
+
 rs.close()
+ts.close()
 
 
 
