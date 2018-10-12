@@ -21,7 +21,7 @@ except mysoc.error as err:
 server_binding = ('', 60000)
 ts.bind(server_binding)
 ts.listen(1)
-# fixme i think we should be hardcoding the name of the host for ts
+
 host = mysoc.gethostname()
 print("[TS]: TS Server host name is: ", host)
 localhost_ip = (mysoc.gethostbyname(host))
@@ -29,9 +29,6 @@ print("[TS]: TS Server IP address is  ", localhost_ip)
 csockid, addr = ts.accept()
 print("[TS]: Got a connection request from a client to this server: ", addr)
 
-data_from_server = csockid.recv(100)
-findHost = data_from_server.decode('utf-8')
-print("[TS] Data received from client: [", findHost + "]")
 
 # IMPORT FROM TS FILE HERE
 inPath = 'PROJI-DNSTS.txt'
@@ -54,32 +51,36 @@ while True:
 	RSarr[rowIndex].append(splitList[2])
 	rowIndex += 1
 
-foundHost = 0
-retHostDetail = ""
-for i in range(numLinesInFile):
-	if (RSarr[i][0] == findHost):
-		print("FOUND HOST NAME")
-		foundHost = 1
-		for j in range(3):
-			retHostDetail = retHostDetail + RSarr[i][j] + " "
-		print("Going to sent to client" + retHostDetail)
 
-# send the result back
-if (foundHost == 0):
-	errorMessage = findHost + "- Error:HOST NOT FOUND"
-	csockid.send(errorMessage.encode('utf-8'))
-else:
-	csockid.send(retHostDetail.encode('utf-8'))
+while 1:
+	data_from_server = csockid.recv(100)
+	if not data_from_server:
+		print("%%%%%%HAVING TO BREAK NOW ")
+		break
+	findHost = data_from_server.decode('utf-8')
+	print("[TS] Data received from client: [", findHost + "]")
+	
+	foundHost = 0
+	str=""
+	
+	
+	for i in range(numLinesInFile):
+		if (RSarr[i][0] == findHost):
+			print("FOUND HOST NAME")
+			foundHost = 1
+			str = RSarr[i][0] + " " + RSarr[i][1] + " " + RSarr[i][2]
+			print("Going to sent to client" + str)
+			break
+	
+	# send the result back
+	if foundHost == 0:
+		errorMessage = findHost + "- Error:HOST NOT FOUND"
+		csockid.send(errorMessage.encode('utf-8'))
+	else:
+		csockid.send(str.encode('utf-8'))
 
 # Close the server socket
 ts.close()
+print("***CLOSED TS SERVER")
 exit()
-'''
 
-if (hostnameStr in TS_table):
-	entry = TS_table(hostnameStr)
-else:
-	entry = "hname" + "Error: Host not found"
-
-ctsd.send(entry)
-'''

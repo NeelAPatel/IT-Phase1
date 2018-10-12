@@ -16,9 +16,7 @@ try:
 	print("[C]: Socket for RS created")
 except mysoc.error as err:
 	print('{} \n'.format("socket open error ", err))
-
-
-
+	
 RsPort = 50020
 clientHost = mysoc.gethostname()
 print("[C]: Client name is: " , clientHost)
@@ -67,73 +65,46 @@ while True:
 	splitList = msg.split()
 	if splitList[2] == 'NS':
 		print("MUST CONNECT TO TS NOW.")
+		
+		# SECOND SOCKET
 		try:
 			ts = mysoc.socket(mysoc.AF_INET, mysoc.SOCK_STREAM)
 			print("socket created")
 		except mysoc.error as err:
 			print('{} \n'.format("socket open error ", err))
 		
+		TsPort = 60000
+		tsHostName = splitList[0]
+		ts_ip = mysoc.gethostbyname(tsHostName)
+		server_bindingTS = (ts_ip, TsPort)
+		ts.connect(server_bindingTS)
+		
+		# send the hostname to ts
+		ts.send(inLine.encode('utf-8'))
+		data_from_ts = ts.recv(1024)
+		print("[C] recieved: ", data_from_ts.decode('utf-8'))
+		ts.close()
+		
+		#FIXME still add the code about ns from ts
+		
 	else:
-		print("VALID")
+		print("VALID: ", msg)
 	
 	print("")
 
-
-
-
-print("Stuff ended")
-data_from_server = rs.recv(1024)
-print("[C]: Data received from RS server: [", data_from_server.decode('utf-8'), "]")
-data_from_server_decoded= data_from_server.decode('utf-8')
+rs.close()
 
 
 
 
-splitList = data_from_server_decoded.split()
-
-for i in splitList:
-	if(i=='A'): #can hard code 2 bc it will always be in the 3rd position
-		print(data_from_server_decoded)
-	else:
-		print("[C]: Will not bind, need to find host name["+splitList[0] + "]")
-		# second Socket
-		try:
-			ts = mysoc.socket(mysoc.AF_INET, mysoc.SOCK_STREAM)
-			print("socket created")
-		except mysoc.error as err:
-			print('{} \n'.format("socket open error ", err))
-		
-		tsHostName = splitList[0]
-		
-		TsPort = 60000
-		#FIXME this should be a different hostshortcut but cant figure it out,
-		#FIXME SETTING IT ALL AS SAME HOST NAME RN BC CANT FIGURE IT OUT
-		#ts_ip = mysoc.gethostbyname(splitList[0])
-		ts_ip = mysoc.gethostbyname(mysoc.gethostname())
-		print(ts_ip, " ]ip ")
-		server_bindingTS = (ts_ip, TsPort)
-		ts.connect(server_bindingTS)
-		ts.send(tsHostName.encode('utf-8')) #send the hostname to ts
-		data_from_ts = ts.recv(1024)
-		print("[C] recieved: ", data_from_ts.decode('utf-8'))
+#print("Stuff ended")
+#data_from_server = rs.recv(1024)
+#print("[C]: Data received from RS server: [", data_from_server.decode('utf-8'), "]")
+#data_from_server_decoded= data_from_server.decode('utf-8')
 
 
 
-'''
 
-ctors.send("hostname", RSserver)
-dr = ctors = recv()
 
-if flag field(dr) == 'A':
-	output(dr)
-else:
-	if flag - field(dr) == 'NS':
-		#Connect to TS server
-		TSname = hostname - field(fr)
-		# Determine IP address  of TSname/ bind ctots to TS addreess
-		ctots.send(TSHostName..? )
-		
-		#Connect and send hostname string
-		dr = ctots.recv()
-		output(dr)
-		'''
+
+
