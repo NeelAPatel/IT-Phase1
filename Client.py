@@ -50,7 +50,7 @@ print("[C < RS]: Response: " + msg)
 # send num of lookups
 
 #create a file to output the data
-fileOut = open("RESOLVED.txt", "w")
+fileOut = open("Resolved.txt", "w")
 tsConnected = False
 while True:
 	# Each iteration = one lookup in TS/RS
