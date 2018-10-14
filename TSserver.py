@@ -54,31 +54,6 @@ while True:
 
 while 1:
 	data_from_server = csockid.recv(100)
-	# if not data_from_server:
-	# 	print("%%%%%%HAVING TO BREAK NOW ")
-	# 	break
-	# findHost = data_from_server.decode('utf-8')
-	# print("[TS] Data received from client: [", findHost + "]")
-	#
-	# foundHost = 0
-	# str=""
-	#
-	#
-	# for i in range(numLinesInFile):
-	# 	if (RSarr[i][0] == findHost):
-	# 		print("FOUND HOST NAME")
-	# 		foundHost = 1
-	# 		str = RSarr[i][0] + " " + RSarr[i][1] + " " + RSarr[i][2]
-	# 		print("Going to send to client" + str)
-	# 		break
-	#
-	# # send the result back
-	# if foundHost == 0:
-	# 	errorMessage = findHost + "- Error:HOST NOT FOUND"
-	# 	csockid.send(errorMessage.encode('utf-8'))
-	# else:
-	# 	print("Sending host name details nowts")
-	# 	csockid.send(str.encode('utf-8'))
 	
 	if data_from_server:
 		print("[TS]: Data recieved")
@@ -88,8 +63,7 @@ while 1:
 		if (findHost == "Kill TS"):
 			break
 		
-		
-		
+	
 		foundHost = 0
 		str=""
 		
@@ -104,7 +78,7 @@ while 1:
 		
 		# send the result back
 		if foundHost == 0:
-			errorMessage = findHost + "- Error:HOST NOT FOUND"
+			errorMessage = findHost + " - " + "Error:HOST NOT FOUND"
 			csockid.send(errorMessage.encode('utf-8'))
 		else:
 			print("Sending host name details now ts")

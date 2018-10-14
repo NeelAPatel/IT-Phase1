@@ -37,9 +37,6 @@ server_bindingRS = (clientIP, RsPort)
 rs.connect(server_bindingRS)
 print ("[C]:  Connected to RS Server")
 
-
-
-
 # Import from file
 inPath = 'PROJI-HNS.txt'
 numLinesInFile = fileLineCount(inPath)
@@ -52,7 +49,9 @@ msg = data_from_server.decode('utf-8')
 print("[C < RS]: Response: " + msg)
 # send num of lookups
 
-
+#create a file to output the data
+fileOut = open("RESOLVED.txt", "w")
+tsConnected = False
 while True:
 	# Each iteration = one lookup in TS/RS
 	inLine = inFile.readline()
@@ -73,25 +72,32 @@ while True:
 	
 	splitList = msg.split()
 	if splitList[2] == 'NS':
-		print("[C]: MUST CONNECT TO TS NOW.")
+		if tsConnected == False:
+			tsConnected= True
+			print("[C]: MUST CONNECT TO TS NOW.")
+			TsPort = 60000
+			tsHostName = splitList[0]
+			ts_ip = mysoc.gethostbyname(tsHostName)
+			print("GREP IP IS: ", ts_ip)
+			server_bindingTS = (clientIP, TsPort)
+			ts.connect(server_bindingTS)
+			print("[C]: Connected to TS Server")
 	
-		TsPort = 60000
-		tsHostName = "grep.cs.rutgers.edu"
-		ts_ip = mysoc.gethostbyname(tsHostName)
-		print("GREP IP IS: ", ts_ip)
-		server_bindingTS = (clientIP, TsPort)
-		ts.connect(server_bindingTS)
-		print("[C]: Connected to TS Server")
-	
-	# send the hostname to ts
-		#print("[C > TS] sending: "  + inLine)
-		#ts.send(inLine.encode('utf-8'))
-		#data_from_ts = ts.recv(1024)
-		#print("[C < TS] received:  ", data_from_ts.decode('utf-8'))
+		#send the hostname to ts
+		print("[C > TS] sending: "  + inLine)
+		ts.send(inLine.encode('utf-8'))
+		data_from_ts = ts.recv(1024)
+		print("[C < TS] received:  ", data_from_ts.decode('utf-8'))
+		msgTS= data_from_ts.decode('utf-8')
+		splitListTS = msgTS.split()
 		
-		#FIXME still add the code about ns from ts
-		
+		#write to file
+		strToFileTS = msgTS + "\n"
+		fileOut.write(strToFileTS)
 	else:
+		# output the string to result file
+		strToFile = msg + "\n"
+		fileOut.write(strToFile)
 		print("[C]: Line is VALID: ", msg)
 	
 	print("")
