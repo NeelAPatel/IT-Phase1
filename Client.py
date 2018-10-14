@@ -31,19 +31,12 @@ print("[C]: Client name is: " , clientHost)
 clientIP = mysoc.gethostbyname(mysoc.gethostname())
 print("[C]: Client IP is: " , clientIP)
 
+
 # connect to RS_SERVER first
 server_bindingRS = (clientIP, RsPort)
 rs.connect(server_bindingRS)
 print ("[C]:  Connected to RS Server")
 
-
-
-TsPort = 60000
-tsHostName = mysoc.gethostname()
-ts_ip = mysoc.gethostbyname(tsHostName)
-server_bindingTS = (ts_ip, TsPort)
-ts.connect(server_bindingTS)
-print("[C]: Connected to TS Server")
 
 
 
@@ -81,13 +74,20 @@ while True:
 	splitList = msg.split()
 	if splitList[2] == 'NS':
 		print("[C]: MUST CONNECT TO TS NOW.")
-		
-		
-		# send the hostname to ts
-		print("[C > TS] sending: "  + inLine)
-		ts.send(inLine.encode('utf-8'))
-		data_from_ts = ts.recv(1024)
-		print("[C < TS] received:  ", data_from_ts.decode('utf-8'))
+	
+		TsPort = 60000
+		tsHostName = "grep.cs.rutgers.edu"
+		ts_ip = mysoc.gethostbyname(tsHostName)
+		print("GREP IP IS: ", ts_ip)
+		server_bindingTS = (clientIP, TsPort)
+		ts.connect(server_bindingTS)
+		print("[C]: Connected to TS Server")
+	
+	# send the hostname to ts
+		#print("[C > TS] sending: "  + inLine)
+		#ts.send(inLine.encode('utf-8'))
+		#data_from_ts = ts.recv(1024)
+		#print("[C < TS] received:  ", data_from_ts.decode('utf-8'))
 		
 		#FIXME still add the code about ns from ts
 		

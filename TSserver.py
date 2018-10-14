@@ -22,7 +22,7 @@ server_binding = ('', 60000)
 ts.bind(server_binding)
 ts.listen(1)
 
-host = mysoc.gethostname()
+host = "grep.cs.rutgers.edu"
 print("[TS]: TS Server host name is: ", host)
 localhost_ip = (mysoc.gethostbyname(host))
 print("[TS]: TS Server IP address is  ", localhost_ip)
