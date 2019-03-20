@@ -22,7 +22,7 @@ server_binding = ('', 60000)
 ts.bind(server_binding)
 ts.listen(1)
 
-host = "grep.cs.rutgers.edu"
+host = mysoc.gethostname()
 print("[TS]: TS Server host name is: ", host)
 localhost_ip = (mysoc.gethostbyname(host))
 print("[TS]: TS Server IP address is  ", localhost_ip)
@@ -86,7 +86,7 @@ while 1:
 
 # Close the server socket
 
-print("[TS] Client told me to kill myself... goodbye.")
+print("[TS] Client told me to close. Goodbye. ")
 ts.close()
 exit()
 

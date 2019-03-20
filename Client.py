@@ -50,7 +50,7 @@ print("[C < RS]: Response: " + msg)
 # send num of lookups
 
 #create a file to output the data
-fileOut = open("Resolved.txt", "w")
+fileOut = open("RESOLVED.txt", "w")
 tsConnected = False
 while True:
 	# Each iteration = one lookup in TS/RS
@@ -79,7 +79,7 @@ while True:
 			tsHostName = splitList[0]
 			ts_ip = mysoc.gethostbyname(tsHostName)
 			print("GREP IP IS: ", ts_ip)
-			server_bindingTS = (clientIP, TsPort)
+			server_bindingTS = (ts_ip, TsPort)
 			ts.connect(server_bindingTS)
 			print("[C]: Connected to TS Server")
 	
